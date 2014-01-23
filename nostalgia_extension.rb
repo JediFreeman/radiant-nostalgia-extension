@@ -6,20 +6,18 @@ class NostalgiaExtension < Radiant::Extension
   description "Easily track and administer not found pages"
   url "http://github.com/thinkcreate/radiant-nostalgia-extension"
   
-  define_routes do |map|
-    map.namespace :admin do |admin|
-      admin.destroy_all_not_found_requests "/not_found_requests/destroy_all", :controller => 'not_found_requests', :action => 'destroy_all', :conditions => {:method => :delete}
-    end
-  end
-  
   def activate
     FileNotFoundPage.send :include, Nostalgia::FileNotFoundPageExtensions
     NotFoundRequest.reset_at ||= Time.now
     Radiant::Config['nostalgia.rewrites_part_name'] ||= 'rewrites'
     
-    if admin.respond_to?(:dashboard)
-      admin.dashboard.index.add :extensions, 'not_found_requests'
-    end
+    # disable dashboard widget by default, you can enable if you wish.
+    # this widget can get very large very quickly and cause the dashboard
+    # to load up slowly.
+    
+    #if admin.respond_to?(:dashboard)
+    #  admin.dashboard.index.add :extensions, 'not_found_requests'
+    #end
   end
   
   def deactivate

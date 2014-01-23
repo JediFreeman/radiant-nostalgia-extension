@@ -25,7 +25,12 @@ class NotFoundWithRewritesPage < FileNotFoundPage
 </html>
       HTML
       @response.status = 301
-      @not_found_request.decrement_count_created!
+      
+      # by default do not decrement page not found counter when we have a redirect target
+      # we want to know when we get these hits by default.
+      # TODO: Add radiant config value to enable/disable this decrement
+      
+      # @not_found_request.decrement_count_created!
     end
   end
   
